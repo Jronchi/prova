@@ -105,7 +105,7 @@ def main():
     def score():
         global punteggio, game_speed
         if not player.pier_death == True:
-            punteggio += 0.34
+            punteggio += 0.35
         if punteggio % 100 == 0:
             game_speed += 1
         

@@ -76,7 +76,7 @@ class Pier:
         self.image = self.jump_img
         if self.pier_jump:                        # velocità diminuisce mentre sale e aumenta menre scende
             self.pier_hitbox.y -= self.vel_jump * 4
-            self.vel_jump -= 0.7
+            self.vel_jump -= 0.6
         if self.vel_jump < - self.VEL_jump:
             self.pier_jump = False
             self.vel_jump = self.VEL_jump
