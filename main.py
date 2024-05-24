@@ -4,6 +4,7 @@ import random
 import time
 
 pygame.init()
+pygame.mixer.init()
 
 # SCHERMATA DI GIOCO:
 altezza_schermo = 600
@@ -24,7 +25,13 @@ terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
+<<<<<<< HEAD
+suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
+corsa = pygame.mixer.Sound("corsa1.mp3")
+loss = pygame.mixer.Sound("loss.mp3")
+=======
 
+>>>>>>> d33711d42717b151b31ed94584f96075278f36ce
 
 from myPier import Pier
 
@@ -101,6 +108,9 @@ def main():
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
     death_count = 0
+    avvio = True
+    corsa.play()
+    corsa.set_volume(0.2)
 
     def score():
         global punteggio, game_speed
@@ -173,16 +183,29 @@ def main():
                 pygame.time.delay(40)
                 player.pier_death = True
                 
+<<<<<<< HEAD
+                if player.pier_death and avvio:
+                    suonomorte.play()
+                    suonomorte.set_volume(1.0)
+                    avvio = False
+                    corsa.stop()
+                    loss.play()
+                    loss.set_volume(0.2)
+ 
+=======
                 if player.flag:
                     menu(death_count)
 
             
+>>>>>>> d33711d42717b151b31ed94584f96075278f36ce
             #if player.pier_hitbox.colliderect(ostacolo.hitbox) and type(ostacolo) == Bassi:
-                
-                
-
+            
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
+<<<<<<< HEAD
+             
+main()
+=======
 
 def menu(death_count):
     global record
@@ -213,4 +236,9 @@ def menu(death_count):
             if event.type == pygame.KEYUP:
                 main()
 
+<<<<<<< HEAD
 menu(death_count=0)
+=======
+menu(death_count=0)
+>>>>>>> d33711d42717b151b31ed94584f96075278f36ce
+>>>>>>> f3fa72d6b5149c202621faf150392233abf009ac
