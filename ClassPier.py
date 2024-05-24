@@ -118,19 +118,3 @@ class Pier:
     def activate_powerup(self):
         self.immortal = True
         self.immortal_time_left = 100  # durata dell'immortalità in frames
-
-class PowerUp:
-    def init(self):
-        self.image = powerup_image
-        self.hitbox = self.image.get_rect()
-        self.hitbox.x = random.randint(600, 800)
-        self.hitbox.y = random.randint(300, 400)
-
-    def update(self):
-        self.hitbox.x -= 5
-        if self.hitbox.x < -self.hitbox.width:
-            self.hitbox.x = random.randint(600, 800)
-            self.hitbox.y = random.randint(300, 400)
-
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.hitbox.x, self.hitbox.y))
