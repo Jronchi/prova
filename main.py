@@ -29,6 +29,7 @@ suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
 corsa = pygame.mixer.Sound("corsa1.mp3")
 #loss = pygame.mixer.Sound("loss.mp3")
 homemenu = pygame.mixer.Sound("menu.mp3")
+corsapower = pygame.mixer.Sound("corsapu.mp3")
 
 from myPier import Pier
 
@@ -90,6 +91,23 @@ class Bird(Ostacoli):
         SCREEN.blit(self.image[self.index // 5], self.hitbox)
         self.index += 1
 
+class PowerUp:
+    def __init__(self):
+        self.image = pygame.image.load(os.path.join("level_up.png"))
+        self.hitbox = self.image.get_rect()
+        self.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
+        self.hitbox.y = 390
+
+    def update(self):
+        self.hitbox.x -= game_speed
+        if self.hitbox.x < -self.hitbox.width:
+            self.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
+            self.hitbox.y = random.randint(300, 400)
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.hitbox.x, self.hitbox.y))
+       
+
 def main(): 
     global game_speed, x_sfondo, y_sfondo, punteggio, ostacoli, record
     run = True 
@@ -104,10 +122,13 @@ def main():
     record = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
+    powerup = PowerUp()
     death_count = 0
     avvio = True
     corsa.play()
     corsa.set_volume(0.2)
+    corsapower.play()
+    corsapower.set_volume(0.0)
 
     def score():
         global punteggio, game_speed
@@ -155,6 +176,9 @@ def main():
         player.draw(SCREEN)
         player.update(userInput)
 
+        powerup.draw(SCREEN)
+        powerup.update()
+
         if len(ostacoli) < 2:
             a = random.randint(0, 2)
             if a == 0:
@@ -169,7 +193,7 @@ def main():
         for ostacolo in ostacoli:
             ostacolo.draw(SCREEN)
             ostacolo.update()
-            if player.pier_hitbox.colliderect(ostacolo.hitbox):
+            if player.pier_hitbox.colliderect(ostacolo.hitbox) and not player.immortal:
 
                 if punteggio > record:
                     record = punteggio
@@ -185,11 +209,31 @@ def main():
                     suonomorte.set_volume(1.0)
                     avvio = False
                     corsa.stop()
+                    corsapower.stop()
                     #loss.play()
                     #loss.set_volume(0.2)
- 
-                if player.flag:
-                    menu(death_count)
+
+        if not player.immortal:
+            game_speed = 10
+            if player.pier_death:
+                game_speed = 0
+        
+        if player.pier_hitbox.colliderect(powerup.hitbox):
+            player.activate_powerup()
+            powerup.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
+            powerup.hitbox.y = 390
+            corsa.set_volume(0.0)
+            corsapower.set_volume(0.3)
+            
+            if player.immortal:
+                player.immortal_time_left -= 1
+                game_speed = 20
+                if player.immortal_time_left <= 0:
+                    corsapower.set_volume(0.0)
+                    player.immortal = False
+
+        if player.flag:
+            menu(death_count)
 
             
             #if player.pier_hitbox.colliderect(ostacolo.hitbox) and type(ostacolo) == Bassi:
@@ -207,13 +251,13 @@ def menu(death_count):
     while run:
 
         SCREEN.fill((255,255,255))
-        font = pygame.font.Font("freesansbold.ttf", 30)
+        font1 = pygame.font.Font("freesansbold.ttf", 30)
 
         if death_count == 0:
-            text = font.render("Premi un tasto qualsiasi", True, (0,0,0))
+            text = font1.render("Premi un tasto qualsiasi", True, (0,0,0))
         elif death_count > 0:
-            text = font.render("Premi un tasto qualsiasi", True, (0,0,0))
-            score = font.render("Il tuo record: " + str(int(record)), True, (0,0,0))
+            text = font1.render("Premi un tasto qualsiasi", True, (0,0,0))
+            score = font1.render("Il tuo record: " + str(int(record)), True, (0,0,0))
             score_hitbox = score.get_rect()
             score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 50)
             SCREEN.blit(score, score_hitbox)
