@@ -11,18 +11,27 @@ altezza_schermo = 600
 larghezza_schermo = 1100
 SCREEN = pygame.display.set_mode((larghezza_schermo, altezza_schermo))
 
+# pier:
+pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
+
 # ostacoli vari:
 pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png"))]
-bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "bomb.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "sasso.png"))]
+bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
+
+uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6).png"))]
 
 # elementi del paesaggio:
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
+<<<<<<< HEAD
 suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
 corsa = pygame.mixer.Sound("corsa1.mp3")
 loss = pygame.mixer.Sound("loss.mp3")
+=======
+
+>>>>>>> d33711d42717b151b31ed94584f96075278f36ce
 
 from myPier import Pier
 
@@ -47,7 +56,7 @@ class Ostacoli:
         self.image = image
         self.type = type
         self.hitbox = self.image[self.type].get_rect()
-        self.hitbox.x = larghezza_schermo 
+        self.hitbox.x += larghezza_schermo 
     
     def update(self):
         self.hitbox.x -= game_speed
@@ -57,22 +66,35 @@ class Ostacoli:
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.hitbox)
 
-class Pianta(Ostacoli):
+class Pianta(Ostacoli):                      #si pottrebbe fare tmp che controlla che non sia troppo vicino a x
     def __init__(self, image):
-        self.type = random.randint(0, 1)
+        self.type = random.randint(0, 1)     
         super().__init__(image, self.type)
         self.hitbox.y = 400
-        self.hitbox.x += random.randint(634, 867)
+        self.hitbox.x += random.randint(600, 800)
 
 class Bassi(Ostacoli):
     def __init__(self, image):
-        self.type = random.randint(0, 1)
+        self.type = random.randint(0, 3)
         super().__init__(image, self.type)
         self.hitbox.y = 430
-        self.hitbox.x += random.randint(133, 397)
+        self.hitbox.x += random.randint(100, 400)
+
+class Bird(Ostacoli):
+    def __init__(self, image):
+        self.type = 0
+        super().__init__(image, self.type)
+        self.hitbox.y = 310
+        self.index = 0
+    
+    def draw(self, SCREEN): #il draw in Ostacoli non basta perchè è animata
+        if self.index >= 30:
+            self.index = 0
+        SCREEN.blit(self.image[self.index // 5], self.hitbox)
+        self.index += 1
 
 def main(): 
-    global game_speed, x_sfondo, y_sfondo, punteggio, ostacoli
+    global game_speed, x_sfondo, y_sfondo, punteggio, ostacoli, record
     run = True 
     clock = pygame.time.Clock()
     player = Pier()
@@ -93,7 +115,7 @@ def main():
     def score():
         global punteggio, game_speed
         if not player.pier_death == True:
-            punteggio += 0.4
+            punteggio += 0.34
         if punteggio % 100 == 0:
             game_speed += 1
         
@@ -112,7 +134,7 @@ def main():
         image_widht = terreno.get_width()
         SCREEN.blit(terreno, (x_sfondo, y_sfondo))
         SCREEN.blit(terreno, (image_widht + x_sfondo, y_sfondo))
-        if x_sfondo <= -image_widht:
+        if x_sfondo <= -image_widht + 200:
             SCREEN.blit(terreno, (image_widht + x_sfondo, y_sfondo))
             x_sfondo = -25
         x_sfondo -= game_speed
@@ -142,6 +164,8 @@ def main():
                 ostacoli.append(Bassi(bassi))
             elif a == 2:
                 ostacoli.append(Pianta(pianta))
+            elif a == 1 and punteggio > 200:
+                ostacoli.append(Bird(uccello))
         
         score()
 
@@ -159,6 +183,7 @@ def main():
                 pygame.time.delay(40)
                 player.pier_death = True
                 
+<<<<<<< HEAD
                 if player.pier_death and avvio:
                     suonomorte.play()
                     suonomorte.set_volume(1.0)
@@ -167,9 +192,49 @@ def main():
                     loss.play()
                     loss.set_volume(0.2)
  
+=======
+                if player.flag:
+                    menu(death_count)
+
+            
+>>>>>>> d33711d42717b151b31ed94584f96075278f36ce
             #if player.pier_hitbox.colliderect(ostacolo.hitbox) and type(ostacolo) == Bassi:
             
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
+<<<<<<< HEAD
              
 main()
+=======
+
+def menu(death_count):
+    global record
+    run = True
+    while run:
+
+        SCREEN.fill((255,255,255))
+        font = pygame.font.Font("freesansbold.ttf", 30)
+
+        if death_count == 0:
+            text = font.render("Premi un tasto qualsiasi", True, (0,0,0))
+        elif death_count > 0:
+            text = font.render("Premi un tasto qualsiasi", True, (0,0,0))
+            score = font.render("Il tuo record: " + str(int(record)), True, (0,0,0))
+            score_hitbox = score.get_rect()
+            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 50)
+            SCREEN.blit(score, score_hitbox)
+        text_hitbox = text.get_rect()
+        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
+        SCREEN.blit(text, text_hitbox)
+        SCREEN.blit(pier_img, (larghezza_schermo // 2, altezza_schermo // 2 - 140))
+        pygame.display.update()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                # run = False
+                pygame.quit()
+            if event.type == pygame.KEYUP:
+                main()
+
+menu(death_count=0)
+>>>>>>> d33711d42717b151b31ed94584f96075278f36ce

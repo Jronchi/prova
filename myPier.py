@@ -16,7 +16,7 @@ class Pier:
     X = 50
     Y = 380
     Y_down = 405
-    VEL_jump = 7.5  #velocità salto
+    VEL_jump = 8.5  #velocità salto
 
     def __init__(self):
         self.run_img = running
@@ -30,12 +30,14 @@ class Pier:
         self.pier_death = False
 
         self.step_index = 0
-        self.step_index_death = 0
+        self.index_death = 0
         self.vel_jump = self.VEL_jump
         self.image = self.run_img[0]
         self.pier_hitbox = self.image.get_rect()
         self.pier_hitbox.x = self.X
         self.pier_hitbox.y = self.Y
+
+        self.flag = False
 
     def update(self, userInput):
         if self.pier_run:
@@ -87,12 +89,15 @@ class Pier:
         self.step_index +=1
 
     def Death(self):
-        self.image = self.death_img[self.step_index_death]
+        self.image = self.death_img[self.index_death]
         self.pier_hitbox = self.image.get_rect()
         self.pier_hitbox.x = self.X
         self.pier_hitbox.y = self.Y
-        if self.step_index_death < 13:
-            self.step_index_death += 1
+        if self.index_death < 13:
+            self.index_death += 1
+        else:
+            self.flag = True
+            return 
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.pier_hitbox.x, self.pier_hitbox.y))
