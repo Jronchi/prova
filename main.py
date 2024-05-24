@@ -225,22 +225,13 @@ def menu(death_count):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-<<<<<<< HEAD
                 run = False
-=======
                 #run = False
->>>>>>> f243953b655d1b024271a192392c2a99a5ee2cc3
                 pygame.quit()
             if event.type == pygame.KEYUP:
                 homemenu.stop()
                 main()
 
-<<<<<<< HEAD
+
 menu(death_count=0)
-=======
-menu(death_count=0)
-<<<<<<< HEAD
->>>>>>> d33711d42717b151b31ed94584f96075278f36ce
->>>>>>> f3fa72d6b5149c202621faf150392233abf009ac
-=======
->>>>>>> f243953b655d1b024271a192392c2a99a5ee2cc3
+
