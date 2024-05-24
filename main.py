@@ -11,110 +11,39 @@ altezza_schermo = 600
 larghezza_schermo = 1100
 SCREEN = pygame.display.set_mode((larghezza_schermo, altezza_schermo))
 
-# pier:
+# PIER:
 pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
 
-# ostacoli vari:
+# OSTACOLI:
 pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png"))]
 bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
 
 uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6).png"))]
 
-# elementi del paesaggio:
+# PAESAGGIO
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
+# SUONI:
 suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
 corsa = pygame.mixer.Sound("corsa1.mp3")
 #loss = pygame.mixer.Sound("loss.mp3")
-homemenu = pygame.mixer.Sound("menu.mp3")
+home_menu = pygame.mixer.Sound("menu.mp3")
 corsapower = pygame.mixer.Sound("corsapu.mp3")
 
-from myPier import Pier
-
-class Nuvola:
-    def __init__(self, immagine, min, max):
-        self.x = larghezza_schermo + random.randint(min, max) #prima 800,1000
-        self.y = random.randint(80, 200)
-        self.image = immagine
-        self.larghezza = self.image.get_width() 
-
-    def update(self):
-        self.x -= game_speed
-        if self.x < -self.larghezza:
-            self.x = larghezza_schermo + random.randint (2500, 3000)
-            self.y = random.randint (60, 160)
-
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
-
-class Ostacoli:
-    def __init__(self, image, type): 
-        self.image = image
-        self.type = type
-        self.hitbox = self.image[self.type].get_rect()
-        self.hitbox.x += larghezza_schermo 
-    
-    def update(self):
-        self.hitbox.x -= game_speed
-        if self.hitbox.x < -self.hitbox.width:
-            ostacoli.remove(self)
-
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image[self.type], self.hitbox)
-
-class Pianta(Ostacoli):                      #si pottrebbe fare tmp che controlla che non sia troppo vicino a x
-    def __init__(self, image):
-        self.type = random.randint(0, 1)     
-        super().__init__(image, self.type)
-        self.hitbox.y = 400
-        self.hitbox.x += random.randint(600, 800)
-
-class Bassi(Ostacoli):
-    def __init__(self, image):
-        self.type = random.randint(0, 3)
-        super().__init__(image, self.type)
-        self.hitbox.y = 430
-        self.hitbox.x += random.randint(100, 400)
-
-class Bird(Ostacoli):
-    def __init__(self, image):
-        self.type = 0
-        super().__init__(image, self.type)
-        self.hitbox.y = 310
-        self.index = 0
-    
-    def draw(self, SCREEN): #il draw in Ostacoli non basta perchè è animata
-        if self.index >= 30:
-            self.index = 0
-        SCREEN.blit(self.image[self.index // 5], self.hitbox)
-        self.index += 1
-
-class PowerUp:
-    def __init__(self):
-        self.image = pygame.image.load(os.path.join("level_up.png"))
-        self.hitbox = self.image.get_rect()
-        self.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
-        self.hitbox.y = 390
-
-    def update(self):
-        self.hitbox.x -= game_speed
-        if self.hitbox.x < -self.hitbox.width:
-            self.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
-            self.hitbox.y = random.randint(300, 400)
-
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.hitbox.x, self.hitbox.y))
-       
+from ClassPier import Pier
+from ClassNuvola import Nuvola
+from ClassOstacoli import Pianta, Bassi, Bird
+from ClassPowerUp import PowerUp
 
 def main(): 
     global game_speed, x_sfondo, y_sfondo, punteggio, ostacoli, record
     run = True 
     clock = pygame.time.Clock()
     player = Pier()
-    cloud1 = Nuvola(nuvola1, 400, 700)
-    cloud2 = Nuvola(nuvola2, 1000, 1700)
+    cloud1 = Nuvola(nuvola1, 400, 700, larghezza_schermo)
+    cloud2 = Nuvola(nuvola2, 1000, 1700, larghezza_schermo)
     game_speed = 12
     x_sfondo = 0
     y_sfondo = 455
@@ -122,7 +51,7 @@ def main():
     record = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
-    powerup = PowerUp()
+    powerup = PowerUp(larghezza_schermo)
     death_count = 0
     avvio = True
     corsa.play()
@@ -169,30 +98,30 @@ def main():
         sfondo()
 
         cloud2.draw(SCREEN)
-        cloud2.update()
+        cloud2.update(game_speed)
         cloud1.draw(SCREEN)
-        cloud1.update()
+        cloud1.update(game_speed)
 
         player.draw(SCREEN)
         player.update(userInput)
 
         powerup.draw(SCREEN)
-        powerup.update()
+        powerup.update(game_speed)
 
         if len(ostacoli) < 2:
             a = random.randint(0, 2)
             if a == 0:
-                ostacoli.append(Bassi(bassi))
+                ostacoli.append(Bassi(bassi, larghezza_schermo))
             elif a == 2:
-                ostacoli.append(Pianta(pianta))
+                ostacoli.append(Pianta(pianta, larghezza_schermo))
             elif a == 1 and punteggio > 200:
-                ostacoli.append(Bird(uccello))
+                ostacoli.append(Bird(uccello, larghezza_schermo))
         
         score()
 
         for ostacolo in ostacoli:
             ostacolo.draw(SCREEN)
-            ostacolo.update()
+            ostacolo.update(game_speed, ostacoli)
             if player.pier_hitbox.colliderect(ostacolo.hitbox) and not player.immortal:
 
                 if punteggio > record:
@@ -246,10 +175,10 @@ def menu(death_count):
     run = True
     corsa.stop()
     #loss.stop()
-    homemenu.play()
-    homemenu.set_volume(0.3)
-    while run:
+    home_menu.play()
+    home_menu.set_volume(0.3)
 
+    while run:
         SCREEN.fill((255,255,255))
         font1 = pygame.font.Font("freesansbold.ttf", 30)
 
@@ -273,12 +202,8 @@ def menu(death_count):
                 #run = False
                 pygame.quit()
             if event.type == pygame.KEYUP:
-                homemenu.stop()
+                home_menu.stop()
                 main()
-<<<<<<< HEAD
-=======
 
-
->>>>>>> b04c4d3b1913889fcb8c6f54fab6d58e465b32b4
 menu(death_count=0)
 
