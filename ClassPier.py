@@ -13,7 +13,7 @@ downing = [pygame.image.load(os.path.join("immagini/Personaggio", "pier_down.png
 
 dying = [pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(1).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(2.2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(3).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(3.2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(4).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(4.2).png")),pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(5).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(5.2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(6).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(7).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(8).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(9).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(10).png")),]
 
-powerup_image = pygame.image.load(os.path.join("level_up.png"))
+powerup_image = pygame.image.load(os.path.join("immagini/other", "level_up.png"))
 
 class Pier:
     X = 50

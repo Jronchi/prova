@@ -32,6 +32,9 @@ corsa = pygame.mixer.Sound("sounds/corsa1.mp3")
 home_menu = pygame.mixer.Sound("sounds/menu.mp3")
 corsapower = pygame.mixer.Sound("sounds/corsapu.mp3")
 
+#POWER UP 
+immagine_powerUp = pygame.image.load(os.path.join("immagini/other", "level_up.png"))
+
 from ClassPier import Pier
 from ClassNuvola import Nuvola
 from ClassOstacoli import Pianta, Bassi, Bird
@@ -51,7 +54,7 @@ def main():
     record = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
-    powerup = PowerUp(larghezza_schermo)
+    powerup = PowerUp(immagine_powerUp, larghezza_schermo)
     death_count = 0
     avvio = True
     corsa.play()

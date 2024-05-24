@@ -3,9 +3,9 @@ import os
 import random
 
 class PowerUp:
-    def __init__(self, larghezza_schermo):
+    def __init__(self, image, larghezza_schermo):
         self.larghezza_schermo = larghezza_schermo
-        self.image = pygame.image.load(os.path.join("level_up.png"))
+        self.image = image
         self.hitbox = self.image.get_rect()
         self.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
         self.hitbox.y = 390
