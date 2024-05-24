@@ -25,13 +25,10 @@ terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
-<<<<<<< HEAD
 suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
 corsa = pygame.mixer.Sound("corsa1.mp3")
-loss = pygame.mixer.Sound("loss.mp3")
-=======
-
->>>>>>> d33711d42717b151b31ed94584f96075278f36ce
+#loss = pygame.mixer.Sound("loss.mp3")
+homemenu = pygame.mixer.Sound("menu.mp3")
 
 from myPier import Pier
 
@@ -183,33 +180,30 @@ def main():
                 pygame.time.delay(40)
                 player.pier_death = True
                 
-<<<<<<< HEAD
                 if player.pier_death and avvio:
                     suonomorte.play()
                     suonomorte.set_volume(1.0)
                     avvio = False
                     corsa.stop()
-                    loss.play()
-                    loss.set_volume(0.2)
+                    #loss.play()
+                    #loss.set_volume(0.2)
  
-=======
                 if player.flag:
                     menu(death_count)
 
             
->>>>>>> d33711d42717b151b31ed94584f96075278f36ce
             #if player.pier_hitbox.colliderect(ostacolo.hitbox) and type(ostacolo) == Bassi:
             
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
-<<<<<<< HEAD
-             
-main()
-=======
 
 def menu(death_count):
     global record
     run = True
+    corsa.stop()
+    #loss.stop()
+    homemenu.play()
+    homemenu.set_volume(0.3)
     while run:
 
         SCREEN.fill((255,255,255))
@@ -231,14 +225,22 @@ def menu(death_count):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+<<<<<<< HEAD
                 run = False
+=======
+                #run = False
+>>>>>>> f243953b655d1b024271a192392c2a99a5ee2cc3
                 pygame.quit()
             if event.type == pygame.KEYUP:
+                homemenu.stop()
                 main()
 
 <<<<<<< HEAD
 menu(death_count=0)
 =======
 menu(death_count=0)
+<<<<<<< HEAD
 >>>>>>> d33711d42717b151b31ed94584f96075278f36ce
 >>>>>>> f3fa72d6b5149c202621faf150392233abf009ac
+=======
+>>>>>>> f243953b655d1b024271a192392c2a99a5ee2cc3
