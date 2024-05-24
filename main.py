@@ -1,8 +1,10 @@
 import pygame
 import os
 import random
+import time
 
 pygame.init()
+pygame.mixer.init()
 
 # SCHERMATA DI GIOCO:
 altezza_schermo = 600
@@ -17,6 +19,10 @@ bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "bomb.png")), pygam
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
+
+suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
+corsa = pygame.mixer.Sound("corsa1.mp3")
+loss = pygame.mixer.Sound("loss.mp3")
 
 from myPier import Pier
 
@@ -80,6 +86,9 @@ def main():
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
     death_count = 0
+    avvio = True
+    corsa.play()
+    corsa.set_volume(0.2)
 
     def score():
         global punteggio, game_speed
@@ -149,12 +158,18 @@ def main():
 
                 pygame.time.delay(40)
                 player.pier_death = True
-            
+                
+                if player.pier_death and avvio:
+                    suonomorte.play()
+                    suonomorte.set_volume(1.0)
+                    avvio = False
+                    corsa.stop()
+                    loss.play()
+                    loss.set_volume(0.2)
+ 
             #if player.pier_hitbox.colliderect(ostacolo.hitbox) and type(ostacolo) == Bassi:
-                
-                
-
+            
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
-
+             
 main()
