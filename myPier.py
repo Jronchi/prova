@@ -46,12 +46,15 @@ class Pier:
         self.flag = False
 
     def update(self, userInput):
-        if self.pier_run:
-            self.Run()
-        if self.pier_jump:
-            self.Jump()
         if self.pier_down:
             self.Down()
+            
+        if self.pier_jump:
+            self.Jump()
+
+        if self.pier_run:
+            self.Run()
+        
         if self.pier_death:
             self.Death()
         
@@ -75,28 +78,28 @@ class Pier:
             if self.immortal_time_left <= 0:
                 self.immortal = False
 
-    def Run(self):   # step_index serve per far cambiare le immagini mentre corre
-        self.image = self.run_img[self.step_index // 3] # 12:3 = 4 che è il numero di immagini che voglio 
-        self.pier_hitbox = self.image.get_rect()
-        self.pier_hitbox.x = self.X
-        self.pier_hitbox.y = self.Y
-        self.step_index += 1
-
-    def Jump(self):
-        self.image = self.jump_img
-        if self.pier_jump:                        # velocità diminuisce mentre sale e aumenta menre scende
-            self.pier_hitbox.y -= self.vel_jump * 4
-            self.vel_jump -= 0.7
-        if self.vel_jump < - self.VEL_jump:
-            self.pier_jump = False
-            self.vel_jump = self.VEL_jump
-    
     def Down(self):
         self.image = self.down_img[self.step_index // 3]
         self.pier_hitbox = self.image.get_rect()
         self.pier_hitbox.x = self.X
         self.pier_hitbox.y = self.Y_down
         self.step_index +=1
+
+    def Jump(self):
+        self.image = self.jump_img
+        if self.pier_jump:                        # velocità diminuisce mentre sale e aumenta menre scende
+            self.pier_hitbox.y -= self.vel_jump * 4
+            self.vel_jump -= 0.6
+        if self.vel_jump < - self.VEL_jump:
+            self.pier_jump = False
+            self.vel_jump = self.VEL_jump
+
+    def Run(self):   # step_index serve per far cambiare le immagini mentre corre
+        self.image = self.run_img[self.step_index // 3] # 12:3 = 4 che è il numero di immagini che voglio 
+        self.pier_hitbox = self.image.get_rect()
+        self.pier_hitbox.x = self.X
+        self.pier_hitbox.y = self.Y
+        self.step_index += 1
 
     def Death(self):
         self.image = self.death_img[self.index_death]

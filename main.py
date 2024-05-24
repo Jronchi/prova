@@ -133,7 +133,7 @@ def main():
     def score():
         global punteggio, game_speed
         if not player.pier_death == True:
-            punteggio += 0.34
+            punteggio += 0.35
         if punteggio % 100 == 0:
             game_speed += 1
         
@@ -269,9 +269,16 @@ def menu(death_count):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                run = False
                 #run = False
                 pygame.quit()
             if event.type == pygame.KEYUP:
                 homemenu.stop()
                 main()
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> b04c4d3b1913889fcb8c6f54fab6d58e465b32b4
 menu(death_count=0)
+
