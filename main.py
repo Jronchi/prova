@@ -230,5 +230,4 @@ def menu(death_count):
             if event.type == pygame.KEYUP:
                 homemenu.stop()
                 main()
-
 menu(death_count=0)
