@@ -26,11 +26,11 @@ nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
 # SUONI:
-suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
-corsa = pygame.mixer.Sound("corsa1.mp3")
+suonomorte = pygame.mixer.Sound("sounds/suonomorte1.mp3")
+corsa = pygame.mixer.Sound("sounds/corsa1.mp3")
 #loss = pygame.mixer.Sound("loss.mp3")
-home_menu = pygame.mixer.Sound("menu.mp3")
-corsapower = pygame.mixer.Sound("corsapu.mp3")
+home_menu = pygame.mixer.Sound("sounds/menu.mp3")
+corsapower = pygame.mixer.Sound("sounds/corsapu.mp3")
 
 from ClassPier import Pier
 from ClassNuvola import Nuvola
