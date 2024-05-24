@@ -12,9 +12,13 @@ class PowerUp:
 
     def update(self, game_speed):
         self.hitbox.x -= game_speed
+        a = random.randint(0, 15)
         if self.hitbox.x < -self.hitbox.width:
-            self.hitbox.x = random.randint(self.larghezza_schermo + 100, self.larghezza_schermo + 300)
-            self.hitbox.y = random.randint(300, 400)
+            if a == 1:
+                self.hitbox.x = random.randint(self.larghezza_schermo + 100, self.larghezza_schermo + 300)
+                self.hitbox.y = random.randint(300, 400)
+            else:
+                self.hitbox.x += game_speed
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.hitbox.x, self.hitbox.y))

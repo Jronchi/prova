@@ -22,6 +22,8 @@ uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pyga
 
 # PAESAGGIO
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
+#sfondo = pygame.image.load(os.path.join("immagini/Paesaggio", "landscape.png"))
+#sfondo = pygame.transform.scale_by(sfondo, 0.5)
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
@@ -41,15 +43,17 @@ from ClassOstacoli import Pianta, Bassi, Bird
 from ClassPowerUp import PowerUp
 
 def main(): 
-    global game_speed, x_sfondo, y_sfondo, punteggio, ostacoli, record
+    global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record, x_sfondo, y_sfondo
     run = True 
     clock = pygame.time.Clock()
     player = Pier()
     cloud1 = Nuvola(nuvola1, 400, 700, larghezza_schermo)
     cloud2 = Nuvola(nuvola2, 1000, 1700, larghezza_schermo)
     game_speed = 12
-    x_sfondo = 0
-    y_sfondo = 455
+    x_terreno = 0
+    y_terreno = 455
+    # x_sfondo = 0 
+    # y_sfondo = 55
     punteggio = 0
     record = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
@@ -79,15 +83,25 @@ def main():
         text_hitbox.center = 70, 40
         SCREEN.blit(text, text_hitbox)
 
-    def sfondo():
-        global x_sfondo, y_sfondo
+    def suolo():
+        global x_terreno, y_terreno
         image_widht = terreno.get_width()
-        SCREEN.blit(terreno, (x_sfondo, y_sfondo))
-        SCREEN.blit(terreno, (image_widht + x_sfondo, y_sfondo))
-        if x_sfondo <= -image_widht + 200:
-            SCREEN.blit(terreno, (image_widht + x_sfondo, y_sfondo))
-            x_sfondo = -25
-        x_sfondo -= game_speed
+        SCREEN.blit(terreno, (x_terreno, y_terreno))
+        SCREEN.blit(terreno, (image_widht + x_terreno, y_terreno))
+        if x_terreno <= -image_widht + 200:
+            SCREEN.blit(terreno, (image_widht + x_terreno, y_terreno))
+            x_terreno = -25
+        x_terreno -= game_speed
+
+    #def landscape():
+    #    global x_sfondo, y_sfondo
+    #    image_widht = sfondo.get_width()
+    #    SCREEN.blit(sfondo, (x_sfondo, y_sfondo))
+    #    SCREEN.blit(sfondo, (image_widht + x_sfondo, y_sfondo))
+    #    if x_sfondo <= -image_widht + 200:
+    #        SCREEN.blit(sfondo, (image_widht + x_sfondo, y_sfondo))
+    #        x_sfondo = -25
+    #    x_sfondo -= game_speed
 
     while run:
         # per uscire 
@@ -98,8 +112,9 @@ def main():
         SCREEN.fill((120,150,255))   #azzurro cielo (120, 150, 255)
         userInput = pygame.key.get_pressed()
 
-        sfondo()
-
+        #landscape()
+        suolo()
+    
         cloud2.draw(SCREEN)
         cloud2.update(game_speed)
         cloud1.draw(SCREEN)
@@ -107,7 +122,7 @@ def main():
 
         player.draw(SCREEN)
         player.update(userInput)
-
+        
         powerup.draw(SCREEN)
         powerup.update(game_speed)
 
@@ -168,8 +183,6 @@ def main():
             menu(death_count)
 
             
-            #if player.pier_hitbox.colliderect(ostacolo.hitbox) and type(ostacolo) == Bassi:
-            
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
 
@@ -202,10 +215,9 @@ def menu(death_count):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-                #run = False
                 pygame.quit()
             if event.type == pygame.KEYUP:
                 home_menu.stop()
                 main()
 
-menu(death_count=0)
+menu(death_count = 0)
