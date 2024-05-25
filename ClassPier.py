@@ -9,11 +9,15 @@ running = [pygame.image.load(os.path.join("immagini/Personaggio", "pier_run(1).p
 # 4 immagini perchè ha 3 pose ma torna alla prima 2 volte
 jumping = pygame.image.load(os.path.join("immagini/Personaggio", "pier_jump.png"))
 
-downing = [pygame.image.load(os.path.join("immagini/Personaggio", "pier_down.png")), pygame.image.load(os.path.join("immagini/Personaggio", "pier_down.png")), pygame.image.load(os.path.join("immagini/Personaggio", "pier_down.png")), pygame.image.load(os.path.join("immagini/Personaggio", "pier_down.png"))]   
+downing = pygame.image.load(os.path.join("immagini/Personaggio", "pier_down.png"))
 
 dying = [pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(1).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(2.2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(3).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(3.2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(4).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(4.2).png")),pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(5).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(5.2).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(6).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(7).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(8).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(9).png")), pygame.image.load(os.path.join("immagini/Personaggio/death", "pier_death(10).png")),]
 
-powerup_image = pygame.image.load(os.path.join("level_up.png"))
+powered_run = [pygame.image.load(os.path.join("immagini/Personaggio/powered", "pier_powered(1).png")), pygame.image.load(os.path.join("immagini/Personaggio/powered", "pier_powered(2).png")), pygame.image.load(os.path.join("immagini/Personaggio/powered", "pier_powered(1).png")), pygame.image.load(os.path.join("immagini/Personaggio/powered", "pier_powered(3).png")),]  
+
+powered_jump = pygame.image.load(os.path.join("immagini/Personaggio/powered", "pier_powered_jump.png"))
+
+powered_down = pygame.image.load(os.path.join("immagini/Personaggio/powered", "pier_powered_down.png"))
 
 class Pier:
     X = 50
@@ -26,6 +30,9 @@ class Pier:
         self.jump_img = jumping
         self.down_img = downing
         self.death_img = dying
+        self.run_p_img = powered_run
+        self.jump_p_img = powered_jump
+        self.down_p_img = powered_down
 
         self.pier_run = True
         self.pier_jump = False
@@ -79,14 +86,20 @@ class Pier:
                 self.immortal = False
 
     def Down(self):
-        self.image = self.down_img[self.step_index // 3]
+        if self.immortal == False:
+            self.image = self.down_img
+        else:
+            self.image = self.down_p_img
         self.pier_hitbox = self.image.get_rect()
         self.pier_hitbox.x = self.X
         self.pier_hitbox.y = self.Y_down
         self.step_index +=1
 
     def Jump(self):
-        self.image = self.jump_img
+        if self.immortal == False:
+            self.image = self.jump_img
+        else:
+            self.image = self.jump_p_img
         if self.pier_jump:                        # velocità diminuisce mentre sale e aumenta menre scende
             self.pier_hitbox.y -= self.vel_jump * 4
             self.vel_jump -= 0.6
@@ -95,7 +108,11 @@ class Pier:
             self.vel_jump = self.VEL_jump
 
     def Run(self):   # step_index serve per far cambiare le immagini mentre corre
-        self.image = self.run_img[self.step_index // 3] # 12:3 = 4 che è il numero di immagini che voglio 
+        if self.immortal == False:
+            self.image = self.run_img[self.step_index // 3] # 12:3 = 4 che è il numero di immagini che voglio 
+        else:
+            self.image = self.run_p_img[self.step_index // 3]
+
         self.pier_hitbox = self.image.get_rect()
         self.pier_hitbox.x = self.X
         self.pier_hitbox.y = self.Y
@@ -118,19 +135,3 @@ class Pier:
     def activate_powerup(self):
         self.immortal = True
         self.immortal_time_left = 100  # durata dell'immortalità in frames
-
-class PowerUp:
-    def init(self):
-        self.image = powerup_image
-        self.hitbox = self.image.get_rect()
-        self.hitbox.x = random.randint(600, 800)
-        self.hitbox.y = random.randint(300, 400)
-
-    def update(self):
-        self.hitbox.x -= 5
-        if self.hitbox.x < -self.hitbox.width:
-            self.hitbox.x = random.randint(600, 800)
-            self.hitbox.y = random.randint(300, 400)
-
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.hitbox.x, self.hitbox.y))
