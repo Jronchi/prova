@@ -10,6 +10,7 @@ pygame.mixer.init()
 altezza_schermo = 600
 larghezza_schermo = 1100
 SCREEN = pygame.display.set_mode((larghezza_schermo, altezza_schermo))
+pygame.display.set_caption('Pier Run')
 
 # PIER:
 pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
@@ -200,25 +201,41 @@ def menu(death_count):
         font1 = pygame.font.Font("freesansbold.ttf", 30)
 
         if death_count == 0:
-            text = font1.render("Premi un tasto qualsiasi", True, (0,0,0))
+            text = font1.render("PREMI QUI", True, (0,0,0))
         elif death_count > 0:
-            text = font1.render("Premi un tasto qualsiasi", True, (0,0,0))
+            text = font1.render("PREMI QUI", True, (0,0,0))
             score = font1.render("Il tuo record: " + str(int(record)), True, (0,0,0))
             score_hitbox = score.get_rect()
-            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 50)
+            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 100)
             SCREEN.blit(score, score_hitbox)
+        
+        size = (250, 100)
+        pos = (425, 250)
+        
+        colore_r1 = (211, 200, 189)
+        colore_r2 = (0, 0, 0)
+        r1 = pygame.Rect(pos[0], pos[1], size[0], size[1])
+        r2 = pygame.Rect(pos[0]-5, pos[1]-5, size[0]+10, size[1]+10)
+        pygame.draw.rect(SCREEN, colore_r2, r2)
+        pygame.draw.rect(SCREEN, colore_r1, r1)
+
         text_hitbox = text.get_rect()
         text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
         SCREEN.blit(text, text_hitbox)
-        SCREEN.blit(pier_img, (larghezza_schermo // 2, altezza_schermo // 2 - 140))
+        SCREEN.blit(pier_img, (larghezza_schermo // 2 - 25, altezza_schermo // 2 - 170))
         pygame.display.update()
 
+        pos = pygame.mouse.get_pos()
+
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
-            if event.type == pygame.KEYUP:
-                home_menu.stop()
-                main()
+
+            if r1.collidepoint(pos):
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    home_menu.stop()
+                    main()
 
 menu(death_count = 0)

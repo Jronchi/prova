@@ -134,4 +134,4 @@ class Pier:
 
     def activate_powerup(self):
         self.immortal = True
-        self.immortal_time_left = 100  # durata dell'immortalità in frames
+        self.immortal_time_left = 250  # durata dell'immortalità in frames
