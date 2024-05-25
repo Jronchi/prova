@@ -32,7 +32,8 @@ suonomorte = pygame.mixer.Sound("sounds/suonomorte1.mp3")
 corsa = pygame.mixer.Sound("sounds/corsa1.mp3")
 #loss = pygame.mixer.Sound("loss.mp3")
 home_menu = pygame.mixer.Sound("sounds/menu.mp3")
-corsapower = pygame.mixer.Sound("sounds/corsapu.mp3")
+corsapower = pygame.mixer.Sound("sounds/corsapuneo.mp3")
+activation = pygame.mixer.Sound("sounds/activate.mp3")
 
 #POWER UP 
 immagine_powerUp = pygame.image.load(os.path.join("immagini/other", "level_up.png"))
@@ -62,7 +63,7 @@ def main():
     death_count = 0
     avvio = True
     corsa.play()
-    corsa.set_volume(0.2)
+    corsa.set_volume(0.5)
     corsapower.play()
     corsapower.set_volume(0.0)
 
@@ -108,6 +109,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                corsa.stop()
+                corsapower.stop()
     
         SCREEN.fill((120,150,255))   #azzurro cielo (120, 150, 255)
         userInput = pygame.key.get_pressed()
@@ -162,21 +165,25 @@ def main():
 
         if not player.immortal:
             game_speed = 10
-            corsa.set_volume(0.4)
+            activation.stop()
+            corsa.set_volume(0.5)
             corsapower.set_volume(0.0)
             if player.pier_death:
                 game_speed = 0
         
         if player.pier_hitbox.colliderect(powerup.hitbox):
             player.activate_powerup()
-            powerup.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
-            powerup.hitbox.y = 390
+            powerup.hitbox.x = random.randint(larghezza_schermo + 50, larghezza_schermo + 900)
+            powerup.hitbox.y = random.randint(300, 400)
             corsa.set_volume(0.0)
             
             if player.immortal:
                 player.immortal_time_left -= 1
                 game_speed = 20
-                corsapower.set_volume(0.4)
+                activation.stop()
+                activation.play()
+                activation.set_volume(0.4)
+                corsapower.set_volume(0.5)
                 if player.immortal_time_left <= 0:
                     player.immortal = False
 
@@ -193,7 +200,7 @@ def menu(death_count):
     corsa.stop()
     #loss.stop()
     home_menu.play()
-    home_menu.set_volume(0.3)
+    home_menu.set_volume(0.5)
 
     while run:
         SCREEN.fill((255,255,255))
