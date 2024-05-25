@@ -44,6 +44,8 @@ from ClassNuvola import Nuvola
 from ClassOstacoli import Pianta, Bassi, Bird
 from ClassPowerUp import PowerUp
 
+record = 0
+
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record, x_sfondo, y_sfondo
     run = True 
@@ -57,7 +59,6 @@ def main():
     # x_sfondo = 0 
     # y_sfondo = 55
     punteggio = 0
-    record = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
     powerup = PowerUp(immagine_powerUp, larghezza_schermo)
@@ -174,8 +175,7 @@ def main():
         
         if player.pier_hitbox.colliderect(powerup.hitbox):
             player.activate_powerup()
-            powerup.hitbox.x = random.randint(larghezza_schermo + 50, larghezza_schermo + 900)
-            powerup.hitbox.y = random.randint(300, 400)
+            powerup.hitbox.y = 1000
             corsa.set_volume(0.0)
             
             if player.immortal:
