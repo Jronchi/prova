@@ -29,7 +29,7 @@ suonomorte = pygame.mixer.Sound("suonomorte1.mp3")
 corsa = pygame.mixer.Sound("corsa1.mp3")
 #loss = pygame.mixer.Sound("loss.mp3")
 homemenu = pygame.mixer.Sound("menu.mp3")
-corsapower = pygame.mixer.Sound("corsapu.mp3")
+corsapower = pygame.mixer.Sound("corsapuneo.mp3")
 
 from myPier import Pier
 
@@ -215,6 +215,8 @@ def main():
 
         if not player.immortal:
             game_speed = 10
+            corsa.set_volume(0.4)
+            corsapower.set_volume(0.0)
             if player.pier_death:
                 game_speed = 0
         
@@ -223,13 +225,12 @@ def main():
             powerup.hitbox.x = random.randint(larghezza_schermo + 100, larghezza_schermo + 300)
             powerup.hitbox.y = 390
             corsa.set_volume(0.0)
-            corsapower.set_volume(0.3)
             
             if player.immortal:
                 player.immortal_time_left -= 1
                 game_speed = 20
+                corsapower.set_volume(0.4)
                 if player.immortal_time_left <= 0:
-                    corsapower.set_volume(0.0)
                     player.immortal = False
 
         if player.flag:
@@ -247,7 +248,7 @@ def menu(death_count):
     corsa.stop()
     #loss.stop()
     homemenu.play()
-    homemenu.set_volume(0.3)
+    homemenu.set_volume(0.4)
     while run:
 
         SCREEN.fill((255,255,255))
@@ -275,10 +276,6 @@ def menu(death_count):
             if event.type == pygame.KEYUP:
                 homemenu.stop()
                 main()
-<<<<<<< HEAD
-=======
 
-
->>>>>>> b04c4d3b1913889fcb8c6f54fab6d58e465b32b4
 menu(death_count=0)
 
