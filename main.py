@@ -16,7 +16,7 @@ pygame.display.set_caption('Pier Run')
 pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
 
 # OSTACOLI:
-pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png"))]
+pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png"))]
 bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
 
 uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6).png"))]
@@ -104,11 +104,16 @@ def main():
                 run = False
                 corsa.stop()
                 corsapower.stop()
-    
-        if punteggio < 300:
-            SCREEN.fill((120,150,255))   #azzurro cielo (120, 150, 255)
+
+        colore_giorno = (120,150,255) #azzurro cielo (120, 150, 255)
+        #colore_tramonto = 
+        colore_notte = (17,20,50)
+        #colore_inferno = 
+
+        if punteggio < 600:
+            SCREEN.fill(colore_giorno)   
         else:
-            SCREEN.fill((7,15,30))
+            SCREEN.fill(colore_notte)
 
         userInput = pygame.key.get_pressed()
 
@@ -145,7 +150,6 @@ def main():
                 if punteggio > record:
                     record = punteggio
                 game_speed = 0
-                pygame.draw.rect(SCREEN, (120, 150, 255), pygame.Rect(850, 0, 400, 60))
                 death_count += 1
 
                 pygame.time.delay(40)
