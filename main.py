@@ -23,8 +23,7 @@ uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pyga
 
 # PAESAGGIO
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
-#sfondo = pygame.image.load(os.path.join("immagini/Paesaggio", "landscape.png"))
-#sfondo = pygame.transform.scale_by(sfondo, 0.5)
+
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
@@ -47,7 +46,7 @@ from ClassPowerUp import PowerUp
 record = 0
 
 def main(): 
-    global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record, x_sfondo, y_sfondo
+    global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
     clock = pygame.time.Clock()
     player = Pier()
@@ -76,12 +75,20 @@ def main():
         if punteggio % 100 == 0:
             game_speed += 1
         
-        text = font.render("Punteggio: " + str(int(punteggio)), True, (0, 0, 0))
+        if punteggio < x_tempo: 
+            text = font.render("Punteggio: " + str(int(punteggio)), True, (0, 0, 0))
+        else:
+            text = font.render("Punteggio: " + str(int(punteggio)), True, (255, 255, 255))
+
         text_hitbox = text.get_rect()
         text_hitbox.center = 1000, 40
         SCREEN.blit(text, text_hitbox)
 
-        text = font.render("Record: " + str(int(record)), True, (0, 0, 0))
+        if punteggio < x_tempo: 
+            text = font.render("Record: " + str(int(record)), True, (0, 0, 0))
+        else:
+            text = font.render("Record: " + str(int(record)), True, (255, 255, 255))
+
         text_hitbox = text.get_rect()
         text_hitbox.center = 70, 40
         SCREEN.blit(text, text_hitbox)
@@ -110,7 +117,9 @@ def main():
         colore_notte = (17,20,50)
         #colore_inferno = 
 
-        if punteggio < 600:
+        x_tempo = 100
+
+        if punteggio < x_tempo:
             SCREEN.fill(colore_giorno)   
         else:
             SCREEN.fill(colore_notte)
