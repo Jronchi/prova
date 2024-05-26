@@ -12,8 +12,7 @@ class PowerUp:
 
     def update(self, game_speed):
         self.hitbox.x -= game_speed
-        a = random.randint(0, 600)
-
+        a = random.randint(0, 750)
         if self.hitbox.x < -self.hitbox.width:
             if a == 370:
                 self.hitbox.x = self.larghezza_schermo + random.randint(300, 900)

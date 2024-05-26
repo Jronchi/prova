@@ -96,15 +96,6 @@ def main():
             x_terreno = -25
         x_terreno -= game_speed
 
-    #def landscape():
-    #    global x_sfondo, y_sfondo
-    #    image_widht = sfondo.get_width()
-    #    SCREEN.blit(sfondo, (x_sfondo, y_sfondo))
-    #    SCREEN.blit(sfondo, (image_widht + x_sfondo, y_sfondo))
-    #    if x_sfondo <= -image_widht + 200:
-    #        SCREEN.blit(sfondo, (image_widht + x_sfondo, y_sfondo))
-    #        x_sfondo = -25
-    #    x_sfondo -= game_speed
 
     while run:
         # per uscire 
@@ -114,7 +105,11 @@ def main():
                 corsa.stop()
                 corsapower.stop()
     
-        SCREEN.fill((120,150,255))   #azzurro cielo (120, 150, 255)
+        if punteggio < 300:
+            SCREEN.fill((120,150,255))   #azzurro cielo (120, 150, 255)
+        else:
+            SCREEN.fill((7,15,30))
+
         userInput = pygame.key.get_pressed()
 
         #landscape()
