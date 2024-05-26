@@ -204,37 +204,22 @@ def menu(death_count):
     home_menu.set_volume(0.5)
 
     while run:
-        SCREEN.fill((255,255,255))
-        font1 = pygame.font.Font("freesansbold.ttf", 30)
+        SCREEN.fill((50,50,50))
+        font1 = pygame.font.Font("freesansbold.ttf", 80)
+        font2 = pygame.font.Font("freesansbold.ttf", 30)
 
-        if death_count == 0:
-            text = font1.render("PREMI QUI", True, (0,0,0))
-        elif death_count > 0:
-            text = font1.render("PREMI QUI", True, (0,0,0))
-            score = font1.render("Il tuo record: " + str(int(record)), True, (0,0,0))
-            score_hitbox = score.get_rect()
-            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 100)
-            SCREEN.blit(score, score_hitbox)
+        # RETTANGOLO DI START
+        size = (300, 150)
+        pos = (400, 225)
         
-        size = (250, 100)
-        pos = (425, 250)
-        
-        colore_r1 = (211, 200, 189)
-        colore_r2 = (0, 0, 0)
+        colore_r1 = (40,40,40)
+        colore_r2 = (240, 240, 240)
         r1 = pygame.Rect(pos[0], pos[1], size[0], size[1])
         r2 = pygame.Rect(pos[0]-5, pos[1]-5, size[0]+10, size[1]+10)
         pygame.draw.rect(SCREEN, colore_r2, r2)
         pygame.draw.rect(SCREEN, colore_r1, r1)
 
-        text_hitbox = text.get_rect()
-        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
-        SCREEN.blit(text, text_hitbox)
-        SCREEN.blit(pier_img, (larghezza_schermo // 2 - 25, altezza_schermo // 2 - 170))
-        pygame.display.update()
-
         pos = pygame.mouse.get_pos()
-
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -244,5 +229,22 @@ def menu(death_count):
                 if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     home_menu.stop()
                     main()
+
+        if death_count == 0:
+            text = font1.render("START", True, (colore_r2))
+        elif death_count > 0:
+            text = font1.render("START", True, (colore_r2))
+            score = font2.render("Il tuo record: " + str(int(record)), True, (colore_r2))
+            score_hitbox = score.get_rect()
+            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 150)
+            SCREEN.blit(score, score_hitbox)
+
+        text_hitbox = text.get_rect()
+        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
+        SCREEN.blit(text, text_hitbox)
+
+        pier_img_s = pygame.transform.scale(pier_img, (70, 104))
+        SCREEN.blit(pier_img_s, (larghezza_schermo // 2 - 100, altezza_schermo // 2 - 183))
+        pygame.display.update()
 
 menu(death_count = 0)
