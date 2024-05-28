@@ -17,9 +17,13 @@ pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
 
 # OSTACOLI:
 pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant(2).png"))]
+pianta_nott = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png"))]
+
+
 bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
 
 uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6).png"))]
+uccello_nott = [pygame.image.load(os.path.join("immagini/Bird", "bird(1)_nott.png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2)_nott.png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3)_nott.png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4)_nott.png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5)_nott.png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6)_nott.png"))]
 
 # PAESAGGIO
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
@@ -27,10 +31,9 @@ terreno_nott = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno_not
 
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
+
 nuvola_nott1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1)_nott.png"))
 nuvola_nott2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2)_nott.png"))
-#nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
-#nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
 # SUONI:
 suonomorte = pygame.mixer.Sound("sounds/suonomorte1.mp3")
@@ -53,18 +56,15 @@ record = 0
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
-    x_tempo = 500
+    orario = 500
     punteggio = 0
     clock = pygame.time.Clock()
     player = Pier()
     cloud1 = Nuvola(nuvola1, 400, 700, larghezza_schermo)
     cloud2 = Nuvola(nuvola2, 1000, 1700, larghezza_schermo) 
-    
     game_speed = 12
     x_terreno = 0
     y_terreno = 455
-    # x_sfondo = 0 
-    # y_sfondo = 55
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
     powerup = PowerUp(immagine_powerUp, larghezza_schermo)
@@ -82,7 +82,7 @@ def main():
         if punteggio % 100 == 0:
             game_speed += 1
         
-        if punteggio < x_tempo: 
+        if punteggio < orario: 
             text = font.render("Punteggio: " + str(int(punteggio)), True, (0, 0, 0))
         else:
             text = font.render("Punteggio: " + str(int(punteggio)), True, (255, 255, 255))
@@ -91,7 +91,7 @@ def main():
         text_hitbox.center = 1000, 40
         SCREEN.blit(text, text_hitbox)
 
-        if punteggio < x_tempo: 
+        if punteggio < orario: 
             text = font.render("Record: " + str(int(record)), True, (0, 0, 0))
         else:
             text = font.render("Record: " + str(int(record)), True, (255, 255, 255))
@@ -102,7 +102,7 @@ def main():
 
     def suolo():
         global x_terreno, y_terreno
-        if punteggio < x_tempo:
+        if punteggio < orario:
             image_widht = terreno.get_width()
             SCREEN.blit(terreno, (x_terreno, y_terreno))
             SCREEN.blit(terreno, (image_widht + x_terreno, y_terreno))
@@ -111,13 +111,12 @@ def main():
                 x_terreno = -25
             x_terreno -= game_speed
 
-        if punteggio >= x_tempo:
-            image_widht = -100
+        if punteggio >= orario:
             image_widht_n = terreno_nott.get_width()
             SCREEN.blit(terreno_nott, (x_terreno, y_terreno))
             SCREEN.blit(terreno_nott, (image_widht_n + x_terreno, y_terreno))
             if x_terreno <= -image_widht_n + 200:
-                SCREEN.blit(terreno, (image_widht_n + x_terreno, y_terreno))
+                SCREEN.blit(terreno_nott, (image_widht_n + x_terreno, y_terreno))
                 x_terreno = -25
             x_terreno -= game_speed
 
@@ -130,24 +129,31 @@ def main():
                 corsapower.stop()
 
         colore_giorno = (120,150,255) #azzurro cielo (120, 150, 255)
-        #colore_tramonto = 
+        colore_crepuscolo = (80, 90,180)
         colore_notte = (17,20,50)
-        #colore_inferno = 
-
-        if punteggio < x_tempo:
-            SCREEN.fill(colore_giorno)   
-        else:
+         
+        if punteggio + 100 < orario:
+            SCREEN.fill(colore_giorno)  
+        elif punteggio < orario:
+            SCREEN.fill(colore_crepuscolo)
+        elif punteggio >= orario:
             SCREEN.fill(colore_notte)
 
         userInput = pygame.key.get_pressed()
 
         #landscape()
         suolo()
-    
-        cloud2.draw(SCREEN)
-        cloud2.update(game_speed)
-        cloud1.draw(SCREEN)
-        cloud1.update(game_speed)
+
+        if punteggio < orario:
+            cloud2.draw(SCREEN, nuvola2)
+            cloud2.update(game_speed)
+            cloud1.draw(SCREEN, nuvola1)
+            cloud1.update(game_speed)
+        else:
+            cloud2.draw(SCREEN, nuvola_nott2)
+            cloud2.update(game_speed)
+            cloud1.draw(SCREEN, nuvola_nott1)
+            cloud1.update(game_speed)
 
         player.draw(SCREEN)
         player.update(userInput)
@@ -160,9 +166,15 @@ def main():
             if a == 0:
                 ostacoli.append(Bassi(bassi, larghezza_schermo))
             elif a == 2:
-                ostacoli.append(Pianta(pianta, larghezza_schermo))
+                if punteggio + 20 < orario: 
+                    ostacoli.append(Pianta(pianta, larghezza_schermo))
+                else:
+                    ostacoli.append(Pianta(pianta_nott, larghezza_schermo)) 
             elif a == 1 and punteggio > 200:
-                ostacoli.append(Bird(uccello, larghezza_schermo))
+                if punteggio + 20 < orario: 
+                    ostacoli.append(Bird(uccello, larghezza_schermo))
+                else:
+                    ostacoli.append(Bird(uccello_nott, larghezza_schermo))
         
         score()
 

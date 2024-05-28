@@ -16,5 +16,5 @@ class Nuvola:
             self.x = self.larghezza_schermo + random.randint (2500, 3000)
             self.y = random.randint (60, 160)
 
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+    def draw(self, SCREEN, immagine):
+        SCREEN.blit(immagine, (self.x, self.y))
