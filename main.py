@@ -16,16 +16,21 @@ pygame.display.set_caption('Pier Run')
 pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
 
 # OSTACOLI:
-pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png"))]
+pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant(2).png"))]
 bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
 
 uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6).png"))]
 
 # PAESAGGIO
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
+terreno_nott = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno_nott.png"))
 
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
+nuvola_nott1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1)_nott.png"))
+nuvola_nott2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2)_nott.png"))
+#nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
+#nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
 # SUONI:
 suonomorte = pygame.mixer.Sound("sounds/suonomorte1.mp3")
@@ -48,16 +53,18 @@ record = 0
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
+    x_tempo = 500
+    punteggio = 0
     clock = pygame.time.Clock()
     player = Pier()
     cloud1 = Nuvola(nuvola1, 400, 700, larghezza_schermo)
-    cloud2 = Nuvola(nuvola2, 1000, 1700, larghezza_schermo)
+    cloud2 = Nuvola(nuvola2, 1000, 1700, larghezza_schermo) 
+    
     game_speed = 12
     x_terreno = 0
     y_terreno = 455
     # x_sfondo = 0 
     # y_sfondo = 55
-    punteggio = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
     powerup = PowerUp(immagine_powerUp, larghezza_schermo)
@@ -95,14 +102,24 @@ def main():
 
     def suolo():
         global x_terreno, y_terreno
-        image_widht = terreno.get_width()
-        SCREEN.blit(terreno, (x_terreno, y_terreno))
-        SCREEN.blit(terreno, (image_widht + x_terreno, y_terreno))
-        if x_terreno <= -image_widht + 200:
+        if punteggio < x_tempo:
+            image_widht = terreno.get_width()
+            SCREEN.blit(terreno, (x_terreno, y_terreno))
             SCREEN.blit(terreno, (image_widht + x_terreno, y_terreno))
-            x_terreno = -25
-        x_terreno -= game_speed
+            if x_terreno <= -image_widht + 200:
+                SCREEN.blit(terreno, (image_widht + x_terreno, y_terreno))
+                x_terreno = -25
+            x_terreno -= game_speed
 
+        if punteggio >= x_tempo:
+            image_widht = -100
+            image_widht_n = terreno_nott.get_width()
+            SCREEN.blit(terreno_nott, (x_terreno, y_terreno))
+            SCREEN.blit(terreno_nott, (image_widht_n + x_terreno, y_terreno))
+            if x_terreno <= -image_widht_n + 200:
+                SCREEN.blit(terreno, (image_widht_n + x_terreno, y_terreno))
+                x_terreno = -25
+            x_terreno -= game_speed
 
     while run:
         # per uscire 
@@ -116,8 +133,6 @@ def main():
         #colore_tramonto = 
         colore_notte = (17,20,50)
         #colore_inferno = 
-
-        x_tempo = 100
 
         if punteggio < x_tempo:
             SCREEN.fill(colore_giorno)   
