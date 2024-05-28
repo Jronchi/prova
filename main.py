@@ -10,20 +10,20 @@ pygame.mixer.init()
 altezza_schermo = 600
 larghezza_schermo = 1100
 SCREEN = pygame.display.set_mode((larghezza_schermo, altezza_schermo))
+pygame.display.set_caption('Pier Run')
 
 # PIER:
 pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
 
 # OSTACOLI:
-pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png"))]
+pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png"))]
 bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
 
 uccello = [pygame.image.load(os.path.join("immagini/Bird", "bird(1).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(2).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(3).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(4).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(5).png")), pygame.image.load(os.path.join("immagini/Bird", "bird(6).png"))]
 
 # PAESAGGIO
 terreno = pygame.image.load(os.path.join("immagini/Paesaggio", "terreno.png"))
-#sfondo = pygame.image.load(os.path.join("immagini/Paesaggio", "landscape.png"))
-#sfondo = pygame.transform.scale_by(sfondo, 0.5)
+
 nuvola1 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(1).png"))
 nuvola2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2).png"))
 
@@ -43,8 +43,10 @@ from ClassNuvola import Nuvola
 from ClassOstacoli import Pianta, Bassi, Bird
 from ClassPowerUp import PowerUp
 
+record = 0
+
 def main(): 
-    global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record, x_sfondo, y_sfondo
+    global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
     clock = pygame.time.Clock()
     player = Pier()
@@ -56,7 +58,6 @@ def main():
     # x_sfondo = 0 
     # y_sfondo = 55
     punteggio = 0
-    record = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     ostacoli = []
     powerup = PowerUp(immagine_powerUp, larghezza_schermo)
@@ -74,12 +75,20 @@ def main():
         if punteggio % 100 == 0:
             game_speed += 1
         
-        text = font.render("Punteggio: " + str(int(punteggio)), True, (0, 0, 0))
+        if punteggio < x_tempo: 
+            text = font.render("Punteggio: " + str(int(punteggio)), True, (0, 0, 0))
+        else:
+            text = font.render("Punteggio: " + str(int(punteggio)), True, (255, 255, 255))
+
         text_hitbox = text.get_rect()
         text_hitbox.center = 1000, 40
         SCREEN.blit(text, text_hitbox)
 
-        text = font.render("Record: " + str(int(record)), True, (0, 0, 0))
+        if punteggio < x_tempo: 
+            text = font.render("Record: " + str(int(record)), True, (0, 0, 0))
+        else:
+            text = font.render("Record: " + str(int(record)), True, (255, 255, 255))
+
         text_hitbox = text.get_rect()
         text_hitbox.center = 70, 40
         SCREEN.blit(text, text_hitbox)
@@ -94,15 +103,6 @@ def main():
             x_terreno = -25
         x_terreno -= game_speed
 
-    #def landscape():
-    #    global x_sfondo, y_sfondo
-    #    image_widht = sfondo.get_width()
-    #    SCREEN.blit(sfondo, (x_sfondo, y_sfondo))
-    #    SCREEN.blit(sfondo, (image_widht + x_sfondo, y_sfondo))
-    #    if x_sfondo <= -image_widht + 200:
-    #        SCREEN.blit(sfondo, (image_widht + x_sfondo, y_sfondo))
-    #        x_sfondo = -25
-    #    x_sfondo -= game_speed
 
     while run:
         # per uscire 
@@ -111,8 +111,19 @@ def main():
                 run = False
                 corsa.stop()
                 corsapower.stop()
-    
-        SCREEN.fill((120,150,255))   #azzurro cielo (120, 150, 255)
+
+        colore_giorno = (120,150,255) #azzurro cielo (120, 150, 255)
+        #colore_tramonto = 
+        colore_notte = (17,20,50)
+        #colore_inferno = 
+
+        x_tempo = 100
+
+        if punteggio < x_tempo:
+            SCREEN.fill(colore_giorno)   
+        else:
+            SCREEN.fill(colore_notte)
+
         userInput = pygame.key.get_pressed()
 
         #landscape()
@@ -148,7 +159,6 @@ def main():
                 if punteggio > record:
                     record = punteggio
                 game_speed = 0
-                pygame.draw.rect(SCREEN, (120, 150, 255), pygame.Rect(850, 0, 400, 60))
                 death_count += 1
 
                 pygame.time.delay(40)
@@ -173,8 +183,7 @@ def main():
         
         if player.pier_hitbox.colliderect(powerup.hitbox):
             player.activate_powerup()
-            powerup.hitbox.x = random.randint(larghezza_schermo + 50, larghezza_schermo + 900)
-            powerup.hitbox.y = random.randint(300, 400)
+            powerup.hitbox.y = 1000
             corsa.set_volume(0.0)
             
             if player.immortal:
@@ -203,29 +212,47 @@ def menu(death_count):
     home_menu.set_volume(0.5)
 
     while run:
-        SCREEN.fill((255,255,255))
-        font1 = pygame.font.Font("freesansbold.ttf", 30)
+        SCREEN.fill((50,50,50))
+        font1 = pygame.font.Font("freesansbold.ttf", 80)
+        font2 = pygame.font.Font("freesansbold.ttf", 30)
 
-        if death_count == 0:
-            text = font1.render("Premi un tasto qualsiasi", True, (0,0,0))
-        elif death_count > 0:
-            text = font1.render("Premi un tasto qualsiasi", True, (0,0,0))
-            score = font1.render("Il tuo record: " + str(int(record)), True, (0,0,0))
-            score_hitbox = score.get_rect()
-            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 50)
-            SCREEN.blit(score, score_hitbox)
-        text_hitbox = text.get_rect()
-        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
-        SCREEN.blit(text, text_hitbox)
-        SCREEN.blit(pier_img, (larghezza_schermo // 2, altezza_schermo // 2 - 140))
-        pygame.display.update()
+        # RETTANGOLO DI START
+        size = (300, 150)
+        pos = (400, 225)
+        
+        colore_r1 = (40,40,40)
+        colore_r2 = (240, 240, 240)
+        r1 = pygame.Rect(pos[0], pos[1], size[0], size[1])
+        r2 = pygame.Rect(pos[0]-5, pos[1]-5, size[0]+10, size[1]+10)
+        pygame.draw.rect(SCREEN, colore_r2, r2)
+        pygame.draw.rect(SCREEN, colore_r1, r1)
 
+        pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
-            if event.type == pygame.KEYUP:
-                home_menu.stop()
-                main()
+
+            if r1.collidepoint(pos):
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                    home_menu.stop()
+                    main()
+
+        if death_count == 0:
+            text = font1.render("START", True, (colore_r2))
+        elif death_count > 0:
+            text = font1.render("START", True, (colore_r2))
+            score = font2.render("Il tuo record: " + str(int(record)), True, (colore_r2))
+            score_hitbox = score.get_rect()
+            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 150)
+            SCREEN.blit(score, score_hitbox)
+
+        text_hitbox = text.get_rect()
+        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
+        SCREEN.blit(text, text_hitbox)
+
+        pier_img_s = pygame.transform.scale(pier_img, (70, 104))
+        SCREEN.blit(pier_img_s, (larghezza_schermo // 2 - 100, altezza_schermo // 2 - 183))
+        pygame.display.update()
 
 menu(death_count = 0)
