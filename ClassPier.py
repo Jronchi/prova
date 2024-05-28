@@ -96,16 +96,18 @@ class Pier:
         self.step_index +=1
 
     def Jump(self):
-        if self.immortal == False:
+        if not self.immortal:
             self.image = self.jump_img
         else:
             self.image = self.jump_p_img
-        if self.pier_jump:                        # velocità diminuisce mentre sale e aumenta menre scende
+
+        if self.pier_jump:
             self.pier_hitbox.y -= self.vel_jump * 4
             self.vel_jump -= 0.6
-        if self.vel_jump < - self.VEL_jump:
+        if self.vel_jump < -self.VEL_jump:
             self.pier_jump = False
             self.vel_jump = self.VEL_jump
+            self.pier_hitbox.y = self.Y  # Reset Y position when landing
 
     def Run(self):   # step_index serve per far cambiare le immagini mentre corre
         if self.immortal == False:
