@@ -17,7 +17,7 @@ pier_img = pygame.image.load(os.path.join("immagini/Personaggio", "pier.png"))
 
 # OSTACOLI:
 pianta = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant(2).png"))]
-pianta_nott = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant_nott.png"))]
+pianta_nott = [pygame.image.load(os.path.join("immagini/Ostacoli", "plant(1)_nott.png")), pygame.image.load(os.path.join("immagini/Ostacoli", "plant(2)_nott.png"))]
 
 
 bassi = [pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "bomb(1).png")), pygame.image.load(os.path.join("immagini/Ostacoli", "log(2).png"))]
@@ -56,7 +56,7 @@ record = 0
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
-    orario = 500
+    orario = 200
     punteggio = 0
     clock = pygame.time.Clock()
     player = Pier()
@@ -132,7 +132,7 @@ def main():
         colore_crepuscolo = (80, 90,180)
         colore_notte = (17,20,50)
          
-        if punteggio + 100 < orario:
+        if punteggio + 80 < orario:
             SCREEN.fill(colore_giorno)  
         elif punteggio < orario:
             SCREEN.fill(colore_crepuscolo)
