@@ -56,13 +56,16 @@ from ClassNuvola import Nuvola
 from ClassOstacoli import Pianta, Bassi, Bird
 from ClassPowerUp import PowerUp
 
+NERO = (0,0,0)
+BIANCO = (255,255,255)
+
 record = 0
 
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
-    orario_notte = 2
-    orario_inferno = 20
+    orario_notte = 500
+    orario_inferno = 1000
     punteggio = 0
     clock = pygame.time.Clock()
     player = Pier()
@@ -77,6 +80,13 @@ def main():
     death_count = 0
     avvio = True
     
+    # COLORI DELLE ORE DEL GIORNO:
+    colore_giorno = (120,150,255) #azzurro cielo (120, 150, 255)
+    colore_crepuscolo = (80, 90,180)
+    colore_notte = (17,20,50)
+    colore_inferno = (130, 110, 100)
+
+    # SETTAGGI PER AUDIO
     corsa.play()
     corsa.set_volume(0.5)
     corsapower.play()
@@ -90,18 +100,22 @@ def main():
             game_speed += 1
         
         if punteggio < orario_notte: 
-            text = font.render("Punteggio: " + str(int(punteggio)), True, (0, 0, 0))
-        else:
-            text = font.render("Punteggio: " + str(int(punteggio)), True, (255, 255, 255))
+            text = font.render("Punteggio: " + str(int(punteggio)), True, NERO)
+        elif punteggio >= orario_notte and punteggio < orario_inferno:
+            text = font.render("Punteggio: " + str(int(punteggio)), True, BIANCO)
+        elif punteggio >= orario_inferno:
+            text = font.render("Punteggio: " + str(int(punteggio)), True, NERO)
 
         text_hitbox = text.get_rect()
         text_hitbox.center = 1000, 40
         SCREEN.blit(text, text_hitbox)
 
         if punteggio < orario_notte: 
-            text = font.render("Record: " + str(int(record)), True, (0, 0, 0))
-        else:
-            text = font.render("Record: " + str(int(record)), True, (255, 255, 255))
+            text = font.render("Record: " + str(int(record)), True, NERO)
+        elif punteggio >= orario_notte and punteggio < orario_inferno:
+            text = font.render("Record: " + str(int(record)), True, BIANCO)
+        elif punteggio >= orario_inferno:
+            text = font.render("Record: " + str(int(record)), True, NERO)
 
         text_hitbox = text.get_rect()
         text_hitbox.center = 70, 40
@@ -142,18 +156,12 @@ def main():
                 run = False
                 corsa.stop()
                 corsapower.stop()
-
-        colore_giorno = (120,150,255) #azzurro cielo (120, 150, 255)
-        colore_crepuscolo = (80, 90,180)
-        colore_notte = (17,20,50)
-        #colore_alba = (150, 90, 40)
-        colore_inferno = (130, 110, 100)
          
         if punteggio + 80 < orario_notte:
             SCREEN.fill(colore_giorno)  
         elif punteggio < orario_notte:
             SCREEN.fill(colore_crepuscolo)
-        elif punteggio >= orario_notte and punteggio < orario_inferno :
+        elif punteggio >= orario_notte and punteggio < orario_inferno:
             SCREEN.fill(colore_notte)
         elif punteggio >= orario_inferno:
             SCREEN.fill(colore_inferno)
@@ -189,18 +197,18 @@ def main():
             if a == 0:
                 ostacoli.append(Bassi(bassi, larghezza_schermo))
             elif a == 2:
-                if punteggio + 20 < orario_notte: 
+                if punteggio + 25 < orario_notte: 
                     ostacoli.append(Pianta(pianta, larghezza_schermo))
-                elif punteggio + 20 < orario_inferno:
+                elif punteggio + 25 < orario_inferno:
                     ostacoli.append(Pianta(pianta_nott, larghezza_schermo)) 
-                elif punteggio -20 >= orario_inferno:
+                elif punteggio -25 >= orario_inferno:
                    ostacoli.append(Pianta(pianta_inf, larghezza_schermo))  
             elif a == 1 and punteggio > 200:
-                if punteggio + 20 < orario_notte: 
+                if punteggio + 25 < orario_notte: 
                     ostacoli.append(Bird(uccello, larghezza_schermo))
-                elif punteggio + 20 < orario_inferno:
+                elif punteggio + 25 < orario_inferno:
                     ostacoli.append(Bird(uccello_nott, larghezza_schermo))
-                elif punteggio -20 >= orario_inferno:
+                elif punteggio -25 >= orario_inferno:
                     ostacoli.append(Bird(uccello_inf, larghezza_schermo))
     
         score()
@@ -295,7 +303,7 @@ def menu(death_count):
             text = font1.render("START", True, (colore_r2))
         elif death_count > 0:
             text = font1.render("START", True, (colore_r2))
-            score = font2.render("Il tuo record: " + str(int(record)), True, (colore_r2))
+            score = font2.render("Record di sessione: " + str(int(record)), True, (colore_r2))
             score_hitbox = score.get_rect()
             score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 150)
             SCREEN.blit(score, score_hitbox)
