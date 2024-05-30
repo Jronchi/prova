@@ -64,7 +64,7 @@ def main():
     death_count = 0
     avvio = True
     corsa.play()
-    corsa.set_volume(0.5)
+    corsa.set_volume(0.7)
     corsapower.play()
     corsapower.set_volume(0.0)
 
@@ -176,7 +176,7 @@ def main():
         if not player.immortal:
             game_speed = 10
             activation.stop()
-            corsa.set_volume(0.5)
+            corsa.set_volume(0.7)
             corsapower.set_volume(0.0)
             if player.pier_death:
                 game_speed = 0
@@ -191,8 +191,8 @@ def main():
                 game_speed = 20
                 activation.stop()
                 activation.play()
-                activation.set_volume(0.4)
-                corsapower.set_volume(0.5)
+                activation.set_volume(0.7)
+                corsapower.set_volume(0.7)
                 if player.immortal_time_left <= 0:
                     player.immortal = False
 
@@ -209,7 +209,7 @@ def menu(death_count):
     corsa.stop()
     #loss.stop()
     home_menu.play()
-    home_menu.set_volume(0.5)
+    home_menu.set_volume(0.8)
 
     while run:
         SCREEN.fill((50,50,50))
