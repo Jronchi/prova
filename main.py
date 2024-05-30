@@ -52,6 +52,7 @@ activation = pygame.mixer.Sound("sounds/activate.mp3")
 immagine_powerUp = pygame.image.load(os.path.join("immagini/other", "level_up.png"))
 imm_game_over = pygame.image.load(os.path.join("immagini/other", "game_over.png"))
 imm_logo = pygame.image.load(os.path.join("immagini/other", "logo_PR.png"))
+sfondo_menu = pygame.image.load(os.path.join("immagini/other", "sfondo_menu.png"))
 
 from ClassPier import Pier
 from ClassNuvola import Nuvola
@@ -66,7 +67,7 @@ record = 0
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
-    orario_notte = 500
+    orario_notte = 650
     orario_inferno = 1000
     punteggio = 0
     clock = pygame.time.Clock()
@@ -292,7 +293,7 @@ def menu_morte(death_count):
     font2 = pygame.font.Font("freesansbold.ttf", 30)
     text2 = font2.render("Menu", True, BIANCO)
     text2_hitbox = text2.get_rect()
-    text2_hitbox.center = (975, 545)
+    text2_hitbox.center = (980, 545)
     SCREEN.blit(text2, text2_hitbox)
 
     SCREEN.blit(imm_game_over, (larghezza_schermo //2 -320, altezza_schermo // 2 - 90))
@@ -314,7 +315,7 @@ def menu_morte(death_count):
             loss.stop()
             main()
 
-
+    
 def menu_principale(death_count):
     global record
     run = True
@@ -322,39 +323,49 @@ def menu_principale(death_count):
     home_menu.play()
     home_menu.set_volume(0.8)
 
+    x_pier_menu =  random.randint(70, larghezza_schermo - 70)
+    y_pier_menu = - 100
+
     while run:
-        SCREEN.fill((50,50,50))
+        SCREEN.blit(sfondo_menu, (0, 0))
         font1 = pygame.font.Font(None, 30)
-        font2 = pygame.font.Font("freesansbold.ttf", 30)
+        font2 = pygame.font.Font(None, 30)
         
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
                 os.sys()
-
             if event.type == pygame.KEYDOWN:
                     home_menu.stop()
                     main()
 
         if death_count == 0:
-            text = font1.render("PREMI UN TASTO QUALSIASI", True, BIANCO)
+            text = font1.render("PREMI UN TASTO QUALSIASI", True, NERO)
         elif death_count > 0:
-            text = font1.render("PREMI UN TASTO QUALSIASI", True, BIANCO)
-            score = font2.render("Record di sessione: " + str(int(record)), True, BIANCO)
+            text = font1.render("PREMI UN TASTO QUALSIASI", True, NERO)
+            score = font2.render("Record di sessione: " + str(int(record)), True, NERO)
             score_hitbox = score.get_rect()
-            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 250)
+            score_hitbox.center = (130, altezza_schermo // 2 + 280)
             SCREEN.blit(score, score_hitbox)
 
         SCREEN.blit(imm_logo, (larghezza_schermo //2 -320, altezza_schermo // 2 - 90))
-        pygame.display.update()
 
         text_hitbox = text.get_rect()
-        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
+        text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 100)
         SCREEN.blit(text, text_hitbox)
 
-        pier_img_s = pygame.transform.scale(pier_img, (70, 104))
-        SCREEN.blit(pier_img_s, (larghezza_schermo // 2 - 100, altezza_schermo // 2 - 200))
+        y_pier_menu += 3
+
+        if y_pier_menu > altezza_schermo:
+            a = random.randint(0,1100)
+
+            if a == 30:
+                x_pier_menu =  random.randint(0, larghezza_schermo)
+                y_pier_menu = - 100
+
+        pier_img_s = pygame.transform.scale(pier_img, (65, 100))
+        SCREEN.blit(pier_img_s, (x_pier_menu, y_pier_menu))
         pygame.display.update()
 
 menu_principale(death_count = 0)
