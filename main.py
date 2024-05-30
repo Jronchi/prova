@@ -67,7 +67,7 @@ record = 0
 def main(): 
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
-    orario_notte = 650
+    orario_notte = 600
     orario_inferno = 1000
     punteggio = 0
     clock = pygame.time.Clock()
@@ -162,7 +162,7 @@ def main():
                 corsapower.stop()
                 loss.stop()
          
-        if punteggio + 80 < orario_notte:
+        if punteggio + 70 < orario_notte:
             SCREEN.fill(colore_giorno)  
         elif punteggio < orario_notte:
             SCREEN.fill(colore_crepuscolo)
