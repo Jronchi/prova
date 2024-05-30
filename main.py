@@ -43,7 +43,7 @@ nuvola_inf2 = pygame.image.load(os.path.join("immagini/Paesaggio", "nuvole(2)_in
 # SUONI:
 suonomorte = pygame.mixer.Sound("sounds/suonomorte1.mp3")
 corsa = pygame.mixer.Sound("sounds/corsa1.mp3")
-#loss = pygame.mixer.Sound("loss.mp3")
+loss = pygame.mixer.Sound("sounds/loss.mp3")
 home_menu = pygame.mixer.Sound("sounds/menu.mp3")
 corsapower = pygame.mixer.Sound("sounds/corsapuneo.mp3")
 activation = pygame.mixer.Sound("sounds/activate.mp3")
@@ -81,6 +81,7 @@ def main():
     powerup = PowerUp(immagine_powerUp, larghezza_schermo)
     death_count = 0
     avvio = True
+    avvioloss = False
     
     # COLORI DELLE ORE DEL GIORNO:
     colore_giorno = (120,150,255) #azzurro cielo (120, 150, 255)
@@ -158,6 +159,7 @@ def main():
                 run = False
                 corsa.stop()
                 corsapower.stop()
+                loss.stop()
          
         if punteggio + 80 < orario_notte:
             SCREEN.fill(colore_giorno)  
@@ -234,8 +236,6 @@ def main():
                     avvio = False
                     corsa.stop()
                     corsapower.stop()
-                    #loss.play()
-                    #loss.set_volume(0.2)
 
         if not player.immortal:
             game_speed = 10
@@ -255,20 +255,23 @@ def main():
                 game_speed = 20
                 activation.stop()
                 activation.play()
-                activation.set_volume(0.7)
+                activation.set_volume(0.2)
                 corsapower.set_volume(0.7)
                 if player.immortal_time_left <= 0:
                     player.immortal = False
 
         if player.flag:
+            if not avvioloss:
+                loss.play()
+                loss.set_volume(0.4)
+                avvioloss = True
             menu_morte(death_count)
             
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
 
 def menu_morte(death_count):
-    colore_menu_morte = (0, 0, 0, 190)   #trasparenza 
-
+    colore_menu_morte = (0, 0, 0, 190)  # trasparenza 
     menu_surface = pygame.Surface((larghezza_schermo, altezza_schermo), pygame.SRCALPHA)
     menu_surface.fill(colore_menu_morte)
     SCREEN.blit(menu_surface, (0, 0))
@@ -276,7 +279,7 @@ def menu_morte(death_count):
     font1 = pygame.font.Font(None, 30)
     text = font1.render("PREMI UN TASTO QUALSIASI", True, BIANCO)
     text_hitbox = text.get_rect()
-    text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + +80)
+    text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 80)
     SCREEN.blit(text, text_hitbox)
 
     size = (200, 70)
@@ -299,21 +302,23 @@ def menu_morte(death_count):
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-                pygame.quit()
-                os.sys()
+            pygame.quit()
+            os.sys()
 
         if r1.collidepoint(pos):
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                loss.stop()
                 menu_principale(death_count)
 
-        if event.type == pygame.KEYDOWN:           
+        if event.type == pygame.KEYDOWN:
+            loss.stop()
             main()
+
 
 def menu_principale(death_count):
     global record
     run = True
     corsa.stop()
-    #loss.stop()
     home_menu.play()
     home_menu.set_volume(0.8)
 
