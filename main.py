@@ -50,7 +50,8 @@ activation = pygame.mixer.Sound("sounds/activate.mp3")
 
 #ALTRO
 immagine_powerUp = pygame.image.load(os.path.join("immagini/other", "level_up.png"))
-game_over = pygame.image.load(os.path.join("immagini/other", "game_over.png"))
+imm_game_over = pygame.image.load(os.path.join("immagini/other", "game_over.png"))
+imm_logo = pygame.image.load(os.path.join("immagini/other", "logo_PR.png"))
 
 from ClassPier import Pier
 from ClassNuvola import Nuvola
@@ -291,9 +292,8 @@ def menu_morte(death_count):
     text2_hitbox.center = (975, 545)
     SCREEN.blit(text2, text2_hitbox)
 
-    SCREEN.blit(game_over, (larghezza_schermo //2 -320, altezza_schermo // 2 - 90))
+    SCREEN.blit(imm_game_over, (larghezza_schermo //2 -320, altezza_schermo // 2 - 90))
     pygame.display.update()
-    
 
     pos = pygame.mouse.get_pos()
 
@@ -319,7 +319,7 @@ def menu_principale(death_count):
 
     while run:
         SCREEN.fill((50,50,50))
-        font1 = pygame.font.Font("freesansbold.ttf", 80)
+        font1 = pygame.font.Font(None, 30)
         font2 = pygame.font.Font("freesansbold.ttf", 30)
         
         for event in pygame.event.get():
@@ -333,20 +333,23 @@ def menu_principale(death_count):
                     main()
 
         if death_count == 0:
-            text = font1.render("START", True, NERO)
+            text = font1.render("PREMI UN TASTO QUALSIASI", True, BIANCO)
         elif death_count > 0:
-            text = font1.render("START", True, NERO)
-            score = font2.render("Record di sessione: " + str(int(record)), True, NERO)
+            text = font1.render("PREMI UN TASTO QUALSIASI", True, BIANCO)
+            score = font2.render("Record di sessione: " + str(int(record)), True, BIANCO)
             score_hitbox = score.get_rect()
-            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 150)
+            score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 250)
             SCREEN.blit(score, score_hitbox)
+
+        SCREEN.blit(imm_logo, (larghezza_schermo //2 -320, altezza_schermo // 2 - 90))
+        pygame.display.update()
 
         text_hitbox = text.get_rect()
         text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2)
         SCREEN.blit(text, text_hitbox)
 
         pier_img_s = pygame.transform.scale(pier_img, (70, 104))
-        SCREEN.blit(pier_img_s, (larghezza_schermo // 2 - 100, altezza_schermo // 2 - 183))
+        SCREEN.blit(pier_img_s, (larghezza_schermo // 2 - 100, altezza_schermo // 2 - 200))
         pygame.display.update()
 
 menu_principale(death_count = 0)
