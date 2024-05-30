@@ -48,8 +48,9 @@ home_menu = pygame.mixer.Sound("sounds/menu.mp3")
 corsapower = pygame.mixer.Sound("sounds/corsapuneo.mp3")
 activation = pygame.mixer.Sound("sounds/activate.mp3")
 
-#POWER UP 
+#ALTRO
 immagine_powerUp = pygame.image.load(os.path.join("immagini/other", "level_up.png"))
+game_over = pygame.image.load(os.path.join("immagini/other", "game_over.png"))
 
 from ClassPier import Pier
 from ClassNuvola import Nuvola
@@ -259,12 +260,56 @@ def main():
                     player.immortal = False
 
         if player.flag:
-            menu(death_count)
+            menu_morte(death_count)
             
         clock.tick(35)     #la velocità con cui si muove
         pygame.display.update()
 
-def menu(death_count):
+def menu_morte(death_count):
+    colore_menu_morte = (0, 0, 0, 190)   #trasparenza 
+
+    menu_surface = pygame.Surface((larghezza_schermo, altezza_schermo), pygame.SRCALPHA)
+    menu_surface.fill(colore_menu_morte)
+    SCREEN.blit(menu_surface, (0, 0))
+
+    font1 = pygame.font.Font(None, 30)
+    text = font1.render("PREMI UN TASTO QUALSIASI", True, BIANCO)
+    text_hitbox = text.get_rect()
+    text_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + +80)
+    SCREEN.blit(text, text_hitbox)
+
+    size = (200, 70)
+    pos = (880, 510)
+
+    # RETTANGOLO DI MENU 
+    colore_r1 = (255, 255, 255)
+    r1 = pygame.Rect(pos[0], pos[1], size[0], size[1])
+    pygame.draw.rect(SCREEN, colore_r1, r1, 5)
+    font2 = pygame.font.Font("freesansbold.ttf", 30)
+    text2 = font2.render("Menu", True, BIANCO)
+    text2_hitbox = text2.get_rect()
+    text2_hitbox.center = (975, 545)
+    SCREEN.blit(text2, text2_hitbox)
+
+    SCREEN.blit(game_over, (larghezza_schermo //2 -320, altezza_schermo // 2 - 90))
+    pygame.display.update()
+    
+
+    pos = pygame.mouse.get_pos()
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+                pygame.quit()
+                os.sys()
+
+        if r1.collidepoint(pos):
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                menu_principale(death_count)
+
+        if event.type == pygame.KEYDOWN:           
+            main()
+
+def menu_principale(death_count):
     global record
     run = True
     corsa.stop()
@@ -276,34 +321,22 @@ def menu(death_count):
         SCREEN.fill((50,50,50))
         font1 = pygame.font.Font("freesansbold.ttf", 80)
         font2 = pygame.font.Font("freesansbold.ttf", 30)
-
-        # RETTANGOLO DI START
-        size = (300, 150)
-        pos = (400, 225)
         
-        colore_r1 = (40,40,40)
-        colore_r2 = (240, 240, 240)
-        r1 = pygame.Rect(pos[0], pos[1], size[0], size[1])
-        r2 = pygame.Rect(pos[0]-5, pos[1]-5, size[0]+10, size[1]+10)
-        pygame.draw.rect(SCREEN, colore_r2, r2)
-        pygame.draw.rect(SCREEN, colore_r1, r1)
-
-        pos = pygame.mouse.get_pos()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
                 pygame.quit()
+                os.sys()
 
-            if r1.collidepoint(pos):
-                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+            if event.type == pygame.KEYDOWN:
                     home_menu.stop()
                     main()
 
         if death_count == 0:
-            text = font1.render("START", True, (colore_r2))
+            text = font1.render("START", True, NERO)
         elif death_count > 0:
-            text = font1.render("START", True, (colore_r2))
-            score = font2.render("Record di sessione: " + str(int(record)), True, (colore_r2))
+            text = font1.render("START", True, NERO)
+            score = font2.render("Record di sessione: " + str(int(record)), True, NERO)
             score_hitbox = score.get_rect()
             score_hitbox.center = (larghezza_schermo // 2, altezza_schermo // 2 + 150)
             SCREEN.blit(score, score_hitbox)
@@ -316,4 +349,4 @@ def menu(death_count):
         SCREEN.blit(pier_img_s, (larghezza_schermo // 2 - 100, altezza_schermo // 2 - 183))
         pygame.display.update()
 
-menu(death_count = 0)
+menu_principale(death_count = 0)
