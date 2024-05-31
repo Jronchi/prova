@@ -17,7 +17,7 @@ class Ostacoli:
     def draw(self, SCREEN):
         SCREEN.blit(self.image[self.type], self.hitbox)
 
-class Pianta(Ostacoli):                      #si pottrebbe fare tmp che controlla che non sia troppo vicino a x
+class Pianta(Ostacoli):                     
     def __init__(self, image, larghezza_schermo):
         self.type = random.randint(0, 1)     
         super().__init__(image, self.type, larghezza_schermo)

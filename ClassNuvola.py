@@ -11,7 +11,7 @@ class Nuvola:
         self.larghezza = self.image.get_width() 
 
     def update(self, game_speed):
-        self.x -= game_speed
+        self.x -= game_speed + 3
         if self.x < -self.larghezza:
             self.x = self.larghezza_schermo + random.randint (2500, 3000)
             self.y = random.randint (60, 160)
