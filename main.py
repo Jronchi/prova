@@ -68,7 +68,7 @@ def main():
     global game_speed, x_terreno, y_terreno, punteggio, ostacoli, record
     run = True 
     orario_notte = 450
-    orario_inferno = 900
+    orario_inferno = 800
     punteggio = 0
     clock = pygame.time.Clock()
     player = Pier()
